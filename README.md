@@ -130,4 +130,4 @@ This project is all about making a small task runner: 'centimaître'.
 [codecov-url]: https://codecov.io/gh/seald/centimaitre
 [license-image]: https://img.shields.io/github/license/seald/centimaitre.svg?style=flat-square
 [license-url]: https://github.com/seald/centimaitre/blob/master/LICENSE
-[david-image]: https://img.shields.io/david/centimaitre.svg?style=flat-square
+[david-image]: https://img.shields.io/david/seald/centimaitre.svg?style=flat-square
