@@ -45,7 +45,7 @@ Params:
  * **@param {Object}** options
 
 
-### `task(taskName: String\[, dependencies: Array<string>]\[, callback:Function]): void`
+### `task(taskName: String[, dependencies: Array<string>][, callback:Function]): void`
 
 Tasks can be defined in any order, their dependencies are resolved at runtime.
 
