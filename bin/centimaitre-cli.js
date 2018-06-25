@@ -41,6 +41,11 @@ try {
   process.exit(1)
 }
 
+log.debug('Task options: \n')
+for (const option of Object.keys(tasksOptions)) {
+  log.debug(`${option}: ${tasksOptions[option]}`)
+}
+
 Promise.all(tasks.map(taskName => executeTask(taskName, tasksOptions)))
   .then(() => {
     process.exit(0)
@@ -52,5 +57,8 @@ Promise.all(tasks.map(taskName => executeTask(taskName, tasksOptions)))
 
 process.on('beforeExit', () => {
   log.error('It seems a Promise has been orphaned, which means it will never be resolved nor rejected. Exiting.')
+  for (const taskName of tasks) {
+    if (tasks[taskName].finished === false) log.warn(`It may be "${taskName}".`)
+  }
   process.exit(1)
 })

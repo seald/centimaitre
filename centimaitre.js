@@ -112,12 +112,14 @@ const executeTask = async (taskName, options, calledTasks = []) => {
         log.debug(`All dependencies of "${taskName}" have been successfully executed`)
         log.info(`[${chalk.cyan(taskName)}]: Starting...`)
         const startTime = Date.now()
+        tasks[taskName].finished = false
         const result = tasks[taskName].callback({
           ...defaultOptions,
           ...options
         })
         if (result && typeof result.pipe === 'function') await streamToPromise(result)
         else await Promise.resolve(result)
+        tasks[taskName].finished = true
         log.info(`[${chalk.cyan(taskName)}]: Finished after ${chalk.magenta(formatTimeDelta(Date.now() - startTime))}`)
       })
       .catch(err => {
