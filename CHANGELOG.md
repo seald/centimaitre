@@ -1,6 +1,5 @@
-## Unreleased changes
-* Fixed README.md (extra "\\")
+## v1.0.1 (2018-06-25):
 * Added logs of task options
 * Added a hint regarding which task may be orphaned.
-* Updated `mocha` from `^5.1.1` to `^5.2.0`
-* Updated `nyc` from `^11.7.1` to `^12.0.2`
+* Updated dependencies
+* Fixed README.md (extra "\\")
