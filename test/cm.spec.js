@@ -2,7 +2,6 @@
 
 const chai = require('chai')
 const chaiAsPromised = require('chai-as-promised')
-const dirtyChai = require('dirty-chai')
 const fs = require('fs-jetpack')
 const Stream = require('stream')
 const {formatTimeDelta} = require('../utils')
@@ -10,7 +9,6 @@ const {formatTimeDelta} = require('../utils')
 const {resolveTaskArguments, task, tasks, executeTask, streamToPromise, defaultOptions, setDefaultOptions} = require('../centimaitre')
 
 chai.use(chaiAsPromised)
-chai.use(dirtyChai)
 const {expect, assert} = chai
 
 process.on('unhandledRejection', err => {
