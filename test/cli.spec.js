@@ -2,13 +2,11 @@
 
 const chai = require('chai')
 const chaiAsPromised = require('chai-as-promised')
-const dirtyChai = require('dirty-chai')
 const childProcess = require('child_process')
 const path = require('path')
 const {promisify} = require('util')
 
 chai.use(chaiAsPromised)
-chai.use(dirtyChai)
 const {assert, expect} = chai
 const binPath = path.resolve('./bin/centimaitre-cli.js')
 const CLI = async (options = []) => promisify(childProcess.execFile)(binPath, options)
@@ -24,9 +22,11 @@ describe('CLI', () => {
     assert.equal(stderr, '')
     const parsedResult = stdout.split('\n')
     assert.equal(parsedResult.length, 4)
-    assert.isTrue(parsedResult[0].includes('test') && parsedResult[0].includes('Starting...'))
+    assert.include(parsedResult[0], 'test')
+    assert.include(parsedResult[0], 'Starting...')
     assert.equal(parsedResult[1], 'test')
-    assert.isTrue(parsedResult[2].includes('test') && parsedResult[2].includes('Finished after'))
+    assert.include(parsedResult[2], 'test')
+    assert.include(parsedResult[2], 'Finished after')
     assert.equal(parsedResult[3], '')
   })
 
@@ -36,18 +36,39 @@ describe('CLI', () => {
     const parsedResult = stdout.split('\n')
     assert.equal(parsedResult.length, 13)
     let i = 0
-    assert.isTrue(parsedResult[i++].includes('test') && parsedResult[i].includes('Starting...'))
-    assert.equal(parsedResult[i++], 'test')
-    assert.isTrue(parsedResult[i++].includes('test') && parsedResult[i].includes('Finished after'))
-    assert.isTrue(parsedResult[i++].includes('test2') && parsedResult[i].includes('Starting...'))
-    assert.isTrue(parsedResult[i++].includes('test3') && parsedResult[i].includes('Starting...'))
-    assert.equal(parsedResult[i++], 'test2')
-    assert.isTrue(parsedResult[i++].includes('test2') && parsedResult[i].includes('Finished after'))
-    assert.equal(parsedResult[i++], 'test3')
-    assert.isTrue(parsedResult[i++].includes('test3') && parsedResult[i].includes('Finished after'))
-    assert.isTrue(parsedResult[i++].includes('test4') && parsedResult[i].includes('Starting...'))
-    assert.equal(parsedResult[i++], 'test4')
-    assert.isTrue(parsedResult[i++].includes('test4') && parsedResult[i].includes('Finished after'))
+
+    assert.include(parsedResult[i], 'test')
+    assert.include(parsedResult[i], 'Starting...')
+    i++
+    assert.equal(parsedResult[i], 'test')
+    i++
+    assert.include(parsedResult[i], 'test')
+    assert.include(parsedResult[i], 'Finished after')
+    i++
+    assert.include(parsedResult[i], 'test2')
+    assert.include(parsedResult[i], 'Starting...')
+    i++
+    assert.include(parsedResult[i], 'test3')
+    assert.include(parsedResult[i], 'Starting...')
+    i++
+    assert.equal(parsedResult[i], 'test2')
+    i++
+    assert.include(parsedResult[i], 'test2')
+    assert.include(parsedResult[i], 'Finished after')
+    i++
+    assert.equal(parsedResult[i], 'test3')
+    i++
+    assert.include(parsedResult[i], 'test3')
+    assert.include(parsedResult[i], 'Finished after')
+    i++
+    assert.include(parsedResult[i], 'test4')
+    assert.include(parsedResult[i], 'Starting...')
+    i++
+    assert.equal(parsedResult[i], 'test4')
+    i++
+    assert.include(parsedResult[i], 'test4')
+    assert.include(parsedResult[i], 'Finished after')
+    i++
     assert.equal(parsedResult[i], '')
   })
 
@@ -57,7 +78,7 @@ describe('CLI', () => {
       assert.equal(stdout, '')
       const parsedResult = stderr.split('\n')
       assert.equal(parsedResult.length, 2)
-      assert.isTrue(parsedResult[0].includes('--cmfile argument can\'t be given twice to centimaitre'))
+      assert.include(parsedResult[0], '--cmfile argument can\'t be given twice to centimaitre')
       assert.equal(parsedResult[1], '')
       return true
     })
@@ -68,7 +89,7 @@ describe('CLI', () => {
     assert.equal(stdout, '')
     const parsedResult = stderr.split('\n')
     assert.equal(parsedResult.length, 2)
-    assert.isTrue(parsedResult[0].includes('Cannot pass options between tasks'))
+    assert.include(parsedResult[0], 'Cannot pass options between tasks')
     assert.equal(parsedResult[1], '')
     return true
   }))
@@ -78,7 +99,7 @@ describe('CLI', () => {
     assert.equal(stdout, '')
     const parsedResult = stderr.split('\n')
     assert.equal(parsedResult.length, 2)
-    assert.isTrue(parsedResult[0].includes(`Could not resolve file ${path.resolve('test/cmFiles/cmIDontExist.js')}`))
+    assert.include(parsedResult[0], `Could not resolve file ${path.resolve('test/cmFiles/cmIDontExist.js')}`)
     assert.equal(parsedResult[1], '')
     return true
   }))
@@ -88,7 +109,7 @@ describe('CLI', () => {
     assert.equal(stdout, '')
     const parsedResult = stderr.split('\n')
     assert.isAbove(parsedResult.length, 3)
-    assert.isTrue(parsedResult[0].includes('Unknown error Error: Cannot find module \'IDONTEXIST\''))
+    assert.include(parsedResult[0], 'Unknown error Error: Cannot find module \'IDONTEXIST\'')
     return true
   }))
 
@@ -97,7 +118,7 @@ describe('CLI', () => {
     assert.equal(stdout, '')
     const parsedResult = stderr.split('\n')
     assert.isAtLeast(parsedResult.length, 3)
-    assert.isTrue(parsedResult[0].includes('Unknown error Error: Hello there!'))
+    assert.include(parsedResult[0], 'Unknown error Error: Hello there!')
     return true
   }))
 
@@ -106,7 +127,25 @@ describe('CLI', () => {
     assert.equal(stdout, '')
     const parsedResult = stderr.split('\n')
     assert.isAtLeast(parsedResult.length, 3)
-    assert.isTrue(parsedResult[0].includes('Called non-existing task taskName from undefined'))
+    assert.include(parsedResult[0], 'Task "test5" does not exist')
+    return true
+  }))
+
+  it('Orphaned task', () => expect(CLI(['--cmfile=test/cmFiles/orphaned.js', 'test'])).to.be.rejectedWith(Error).and.eventually.satisfy(err => {
+    const {stdout, stderr} = err
+    const splitStdout = stdout.split('\n')
+    const splitStderr = stderr.split('\n')
+
+    assert.include(splitStdout[0], 'test')
+    assert.include(splitStdout[0], 'Starting...')
+    assert.equal(splitStdout[1], '')
+    assert.equal(splitStdout.length, 2)
+
+    assert.include(splitStderr[0], 'It seems a Promise has been orphaned, which means it will never be resolved nor rejected. Exiting.')
+    assert.include(splitStderr[1], 'It may be "test".')
+    assert.equal(splitStderr[2], '')
+    assert.equal(splitStderr.length, 3)
+
     return true
   }))
 
@@ -123,18 +162,39 @@ describe('CLI', () => {
     const parsedResult = stdout.split('\n')
     assert.equal(parsedResult.length, 13)
     let i = 0
-    assert.isTrue(parsedResult[i++].includes('test') && parsedResult[i].includes('Starting...'))
-    assert.equal(parsedResult[i++], 'test')
-    assert.isTrue(parsedResult[i++].includes('test') && parsedResult[i].includes('Finished after'))
-    assert.isTrue(parsedResult[i++].includes('test2') && parsedResult[i].includes('Starting...'))
-    assert.isTrue(parsedResult[i++].includes('test3') && parsedResult[i].includes('Starting...'))
-    assert.equal(parsedResult[i++], 'test2')
-    assert.isTrue(parsedResult[i++].includes('test2') && parsedResult[i].includes('Finished after'))
-    assert.equal(parsedResult[i++], 'test3')
-    assert.isTrue(parsedResult[i++].includes('test3') && parsedResult[i].includes('Finished after'))
-    assert.isTrue(parsedResult[i++].includes('test4') && parsedResult[i].includes('Starting...'))
-    assert.equal(parsedResult[i++], 'test4')
-    assert.isTrue(parsedResult[i++].includes('test4') && parsedResult[i].includes('Finished after'))
+
+    assert.include(parsedResult[i], 'test')
+    assert.include(parsedResult[i], 'Starting...')
+    i++
+    assert.equal(parsedResult[i], 'test')
+    i++
+    assert.include(parsedResult[i], 'test')
+    assert.include(parsedResult[i], 'Finished after')
+    i++
+    assert.include(parsedResult[i], 'test2')
+    assert.include(parsedResult[i], 'Starting...')
+    i++
+    assert.include(parsedResult[i], 'test3')
+    assert.include(parsedResult[i], 'Starting...')
+    i++
+    assert.equal(parsedResult[i], 'test2')
+    i++
+    assert.include(parsedResult[i], 'test2')
+    assert.include(parsedResult[i], 'Finished after')
+    i++
+    assert.equal(parsedResult[i], 'test3')
+    i++
+    assert.include(parsedResult[i], 'test3')
+    assert.include(parsedResult[i], 'Finished after')
+    i++
+    assert.include(parsedResult[i], 'test4')
+    assert.include(parsedResult[i], 'Starting...')
+    i++
+    assert.equal(parsedResult[i], 'test4')
+    i++
+    assert.include(parsedResult[i], 'test4')
+    assert.include(parsedResult[i], 'Finished after')
+    i++
     assert.equal(parsedResult[i], '')
   })
 })

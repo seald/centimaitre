@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-const {executeTask} = require('../centimaitre')
+const {executeTask, tasks: tasksObject} = require('../centimaitre')
 const {log} = require('../utils')
 const path = require('path')
 const yargs = require('yargs')
@@ -57,8 +57,8 @@ Promise.all(tasks.map(taskName => executeTask(taskName, tasksOptions)))
 
 process.on('beforeExit', () => {
   log.error('It seems a Promise has been orphaned, which means it will never be resolved nor rejected. Exiting.')
-  for (const taskName of tasks) {
-    if (tasks[taskName].finished === false) log.warn(`It may be "${taskName}".`)
+  for (const taskName of Object.keys(tasksObject)) {
+    if (tasksObject[taskName].finished === false) log.error(`It may be "${taskName}".`)
   }
   process.exit(1)
 })
