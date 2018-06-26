@@ -1,6 +1,6 @@
 {
   "name": "centimaitre",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Minimalist task runner",
   "main": "index.js",
   "scripts": {
