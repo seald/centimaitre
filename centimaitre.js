@@ -101,6 +101,10 @@ const executeTask = async (taskName, options, calledTasks = []) => {
   }
   if (!tasks[taskName].promise) {
     log.debug(`Task "${taskName}" is called for the first time`)
+    let mainTaskStartTime
+    if (calledTasks.length === 0) {
+      mainTaskStartTime = Date.now()
+    }
     tasks[taskName].promise = Promise.resolve()
       .then(() => {
         log.debug(`Executing dependencies of "${taskName}"`)
@@ -121,6 +125,7 @@ const executeTask = async (taskName, options, calledTasks = []) => {
         else await Promise.resolve(result)
         tasks[taskName].finished = true
         log.info(`[${chalk.cyan(taskName)}]: Finished after ${chalk.magenta(formatTimeDelta(Date.now() - startTime))}`)
+        if (mainTaskStartTime) log.info(`[${chalk.cyan(taskName)}]: All tasks finished after ${chalk.magenta(formatTimeDelta(Date.now() - mainTaskStartTime))}`)
       })
       .catch(err => {
         if (err.consumed) throw err

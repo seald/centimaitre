@@ -21,20 +21,21 @@ describe('CLI', () => {
     const { stdout, stderr } = await CLI(['--cmfile=test/cmFiles/cm1.js', 'test'])
     assert.equal(stderr, '')
     const parsedResult = stdout.split('\n')
-    assert.equal(parsedResult.length, 4)
+    assert.equal(parsedResult.length, 5)
     assert.include(parsedResult[0], 'test')
     assert.include(parsedResult[0], 'Starting...')
     assert.equal(parsedResult[1], 'test')
     assert.include(parsedResult[2], 'test')
     assert.include(parsedResult[2], 'Finished after')
-    assert.equal(parsedResult[3], '')
+    assert.include(parsedResult[3], 'All tasks finished after')
+    assert.equal(parsedResult[4], '')
   })
 
   it('Testing case with dependencies', async () => {
     const { stdout, stderr } = await CLI(['--cmfile=test/cmFiles/cm1.js', 'test4'])
     assert.equal(stderr, '')
     const parsedResult = stdout.split('\n')
-    assert.equal(parsedResult.length, 13)
+    assert.equal(parsedResult.length, 14)
     let i = 0
 
     assert.include(parsedResult[i], 'test')
@@ -68,6 +69,9 @@ describe('CLI', () => {
     i++
     assert.include(parsedResult[i], 'test4')
     assert.include(parsedResult[i], 'Finished after')
+    i++
+    assert.include(parsedResult[i], 'test4')
+    assert.include(parsedResult[i], 'All tasks finished after')
     i++
     assert.equal(parsedResult[i], '')
   })
@@ -136,15 +140,19 @@ describe('CLI', () => {
     const splitStdout = stdout.split('\n')
     const splitStderr = stderr.split('\n')
 
-    assert.include(splitStdout[0], 'test')
+    assert.equal(splitStdout.length, 4)
+    assert.include(splitStdout[0], 'test2')
     assert.include(splitStdout[0], 'Starting...')
-    assert.equal(splitStdout[1], '')
-    assert.equal(splitStdout.length, 2)
+    assert.include(splitStdout[1], 'test2')
+    assert.include(splitStdout[1], 'Finished after')
+    assert.include(splitStdout[2], 'test')
+    assert.include(splitStdout[2], 'Starting...')
+    assert.equal(splitStdout[3], '')
 
+    assert.equal(splitStderr.length, 3)
     assert.include(splitStderr[0], 'It seems a Promise has been orphaned, which means it will never be resolved nor rejected. Exiting.')
     assert.include(splitStderr[1], 'It may be "test".')
     assert.equal(splitStderr[2], '')
-    assert.equal(splitStderr.length, 3)
 
     return true
   }))
@@ -160,7 +168,7 @@ describe('CLI', () => {
     const { stdout, stderr } = await CLI(['test4'])
     assert.equal(stderr, '')
     const parsedResult = stdout.split('\n')
-    assert.equal(parsedResult.length, 13)
+    assert.equal(parsedResult.length, 14)
     let i = 0
 
     assert.include(parsedResult[i], 'test')
@@ -194,6 +202,9 @@ describe('CLI', () => {
     i++
     assert.include(parsedResult[i], 'test4')
     assert.include(parsedResult[i], 'Finished after')
+    i++
+    assert.include(parsedResult[i], 'test4')
+    assert.include(parsedResult[i], 'All tasks finished after')
     i++
     assert.equal(parsedResult[i], '')
   })
