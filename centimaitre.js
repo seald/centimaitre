@@ -1,6 +1,6 @@
-const {promisify} = require('util')
+const { promisify } = require('util')
 const eos = require('end-of-stream')
-const {log, formatTimeDelta} = require('./utils')
+const { log, formatTimeDelta } = require('./utils')
 const chalk = require('chalk')
 
 const streamToPromise = promisify(eos)
@@ -68,7 +68,7 @@ const resolveTaskArguments = args => {
  * @param {function():Promise|{pipe: function}|void} [callback] when given, is a function that is synchronous, or that returns a Promise, or that returns a Stream. The task is considered finished when the returned Promise is resolved, when the returned Stream has finished or when the synchronous execution has ended.
  */
 const task = (...args) => {
-  const {taskName, dependencies, callback} = resolveTaskArguments(args)
+  const { taskName, dependencies, callback } = resolveTaskArguments(args)
   log.debug(`Defining task "${taskName}" ${dependencies.length > 0 ? `with dependencies "${dependencies.join('", "')}"` : 'with no dependencies'}`)
   if (tasks.hasOwnProperty(taskName)) {
     log.error(`"${taskName}" has been defined multiple times`)

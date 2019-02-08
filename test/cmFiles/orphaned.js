@@ -1,4 +1,4 @@
-const {task} = require('../../index')
+const { task } = require('../../index')
 
 task('test', () => {
   return new Promise(resolve => {})

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-const {executeTask, tasks: tasksObject} = require('../centimaitre')
-const {log} = require('../utils')
+const { executeTask, tasks: tasksObject } = require('../centimaitre')
+const { log } = require('../utils')
 const path = require('path')
 const yargs = require('yargs')
 const chalk = require('chalk')

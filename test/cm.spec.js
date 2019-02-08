@@ -4,12 +4,12 @@ const chai = require('chai')
 const chaiAsPromised = require('chai-as-promised')
 const fs = require('fs-jetpack')
 const Stream = require('stream')
-const {formatTimeDelta} = require('../utils')
+const { formatTimeDelta } = require('../utils')
 
-const {resolveTaskArguments, task, tasks, executeTask, streamToPromise, defaultOptions, setDefaultOptions} = require('../centimaitre')
+const { resolveTaskArguments, task, tasks, executeTask, streamToPromise, defaultOptions, setDefaultOptions } = require('../centimaitre')
 
 chai.use(chaiAsPromised)
-const {expect, assert} = chai
+const { expect, assert } = chai
 
 process.on('unhandledRejection', err => {
   console.error(err)
@@ -52,7 +52,7 @@ describe('Resolve task arguments', () => {
   it('TaskName and dependencies', () => {
     const _taskName = 'taskName'
     const _tasks = ['test', 'test2']
-    const {taskName, dependencies, callback} = resolveTaskArguments([_taskName, _tasks])
+    const { taskName, dependencies, callback } = resolveTaskArguments([_taskName, _tasks])
     assert.equal(taskName, _taskName)
     assert.sameOrderedMembers(dependencies, _tasks)
     /* istanbul ignore next */
@@ -62,7 +62,7 @@ describe('Resolve task arguments', () => {
   it('TaskName and callback', () => {
     const _taskName = 'taskName'
     const _callback = () => { /* test */ }
-    const {taskName, dependencies, callback} = resolveTaskArguments([_taskName, _callback])
+    const { taskName, dependencies, callback } = resolveTaskArguments([_taskName, _callback])
     assert.equal(taskName, _taskName)
     assert.equal(dependencies.length, 0)
     assert.equal(callback, _callback)
@@ -72,7 +72,7 @@ describe('Resolve task arguments', () => {
     const _taskName = 'taskName'
     const _tasks = ['test', 'test2']
     const _callback = () => { /* test */ }
-    const {taskName, dependencies, callback} = resolveTaskArguments([_taskName, _tasks, _callback])
+    const { taskName, dependencies, callback } = resolveTaskArguments([_taskName, _tasks, _callback])
     assert.equal(taskName, _taskName)
     assert.sameOrderedMembers(dependencies, _tasks)
     assert.equal(callback, _callback)
@@ -140,7 +140,7 @@ describe('Execute task', () => {
   it('Executing a single task with options', async () => {
     let executed = 0
     const _taskName = 'taskName'
-    const _options = {test: 'test'}
+    const _options = { test: 'test' }
     const _callback = options => {
       assert.deepEqual(options, _options)
       executed += 1
@@ -158,7 +158,7 @@ describe('Execute task', () => {
       test2: 'test2',
       test: 'TEST'
     })
-    const _options = {test: 'test'}
+    const _options = { test: 'test' }
     const _callback = options => {
       assert.deepEqual(options, {
         test1: 'test1',

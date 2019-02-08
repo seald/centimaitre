@@ -4,10 +4,10 @@ const chai = require('chai')
 const chaiAsPromised = require('chai-as-promised')
 const childProcess = require('child_process')
 const path = require('path')
-const {promisify} = require('util')
+const { promisify } = require('util')
 
 chai.use(chaiAsPromised)
-const {assert, expect} = chai
+const { assert, expect } = chai
 const binPath = path.resolve('./bin/centimaitre-cli.js')
 const CLI = async (options = []) => promisify(childProcess.execFile)(binPath, options)
 
@@ -18,7 +18,7 @@ process.on('unhandledRejection', err => {
 
 describe('CLI', () => {
   it('Testing simple case', async () => {
-    const {stdout, stderr} = await CLI(['--cmfile=test/cmFiles/cm1.js', 'test'])
+    const { stdout, stderr } = await CLI(['--cmfile=test/cmFiles/cm1.js', 'test'])
     assert.equal(stderr, '')
     const parsedResult = stdout.split('\n')
     assert.equal(parsedResult.length, 4)
@@ -31,7 +31,7 @@ describe('CLI', () => {
   })
 
   it('Testing case with dependencies', async () => {
-    const {stdout, stderr} = await CLI(['--cmfile=test/cmFiles/cm1.js', 'test4'])
+    const { stdout, stderr } = await CLI(['--cmfile=test/cmFiles/cm1.js', 'test4'])
     assert.equal(stderr, '')
     const parsedResult = stdout.split('\n')
     assert.equal(parsedResult.length, 13)
@@ -74,7 +74,7 @@ describe('CLI', () => {
 
   it('Giving multiple cmfile options', () =>
     expect(CLI(['--cmfile=test/cmFiles/cm1.js', '--cmfile=test/cmFiles/cm1.js', 'test4'])).to.be.rejectedWith(Error).and.eventually.satisfy(err => {
-      const {stdout, stderr} = err
+      const { stdout, stderr } = err
       assert.equal(stdout, '')
       const parsedResult = stderr.split('\n')
       assert.equal(parsedResult.length, 2)
@@ -85,7 +85,7 @@ describe('CLI', () => {
   )
 
   it('Passing options between tasks', () => expect(CLI(['--cmfile=test/cmFiles/cm1.js', 'test4', '--a=b', 'test'])).to.be.rejectedWith(Error).and.eventually.satisfy(err => {
-    const {stdout, stderr} = err
+    const { stdout, stderr } = err
     assert.equal(stdout, '')
     const parsedResult = stderr.split('\n')
     assert.equal(parsedResult.length, 2)
@@ -95,7 +95,7 @@ describe('CLI', () => {
   }))
 
   it('Wrong path in cmfile', () => expect(CLI(['--cmfile=test/cmFiles/cmIDontExist.js', 'test'])).to.be.rejectedWith(Error).and.eventually.satisfy(err => {
-    const {stdout, stderr} = err
+    const { stdout, stderr } = err
     assert.equal(stdout, '')
     const parsedResult = stderr.split('\n')
     assert.equal(parsedResult.length, 2)
@@ -105,7 +105,7 @@ describe('CLI', () => {
   }))
 
   it('Require error in cmfile', () => expect(CLI(['--cmfile=test/cmFiles/brokencmfile2.js', 'test'])).to.be.rejectedWith(Error).and.eventually.satisfy(err => {
-    const {stdout, stderr} = err
+    const { stdout, stderr } = err
     assert.equal(stdout, '')
     const parsedResult = stderr.split('\n')
     assert.isAbove(parsedResult.length, 3)
@@ -114,7 +114,7 @@ describe('CLI', () => {
   }))
 
   it('Synchronous error in cmfile', () => expect(CLI(['--cmfile=test/cmFiles/brokencmfile.js', 'test'])).to.be.rejectedWith(Error).and.eventually.satisfy(err => {
-    const {stdout, stderr} = err
+    const { stdout, stderr } = err
     assert.equal(stdout, '')
     const parsedResult = stderr.split('\n')
     assert.isAtLeast(parsedResult.length, 3)
@@ -123,7 +123,7 @@ describe('CLI', () => {
   }))
 
   it('Non exisisting task', () => expect(CLI(['--cmfile=test/cmFiles/cm1.js', 'test5'])).to.be.rejectedWith(Error).and.eventually.satisfy(err => {
-    const {stdout, stderr} = err
+    const { stdout, stderr } = err
     assert.equal(stdout, '')
     const parsedResult = stderr.split('\n')
     assert.isAtLeast(parsedResult.length, 3)
@@ -132,7 +132,7 @@ describe('CLI', () => {
   }))
 
   it('Orphaned task', () => expect(CLI(['--cmfile=test/cmFiles/orphaned.js', 'test'])).to.be.rejectedWith(Error).and.eventually.satisfy(err => {
-    const {stdout, stderr} = err
+    const { stdout, stderr } = err
     const splitStdout = stdout.split('\n')
     const splitStderr = stderr.split('\n')
 
@@ -150,14 +150,14 @@ describe('CLI', () => {
   }))
 
   it('Execute with no task', async () => {
-    const {stdout, stderr} = await CLI(['--cmfile=test/cmFiles/cm1.js'])
+    const { stdout, stderr } = await CLI(['--cmfile=test/cmFiles/cm1.js'])
     assert.equal(stdout, '')
     assert.equal(stderr, '')
   })
 
   it('Execute with default cmfile', async () => {
     process.chdir('./test/cmFiles')
-    const {stdout, stderr} = await CLI(['test4'])
+    const { stdout, stderr } = await CLI(['test4'])
     assert.equal(stderr, '')
     const parsedResult = stdout.split('\n')
     assert.equal(parsedResult.length, 13)

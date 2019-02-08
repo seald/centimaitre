@@ -1,4 +1,4 @@
-const {task, setDefaultOptions} = require('./centimaitre')
+const { task, setDefaultOptions } = require('./centimaitre')
 
 module.exports = {
   task,
