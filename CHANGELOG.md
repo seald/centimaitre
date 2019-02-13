@@ -1,3 +1,7 @@
+## v1.0.3 (2019-02-13)
+* Add a log of total time
+* Update dependencies
+
 ## v1.0.2 (2018-06-26):
 * Fix typo for orphaned tasks hint
 

@@ -125,7 +125,7 @@ This project is all about making a small task runner: 'centimaître'.
 [npm-image]: https://img.shields.io/npm/v/centimaitre.svg?style=flat-square
 [npm-url]: https://www.npmjs.com/package/centimaitre
 [travis-image]: https://img.shields.io/travis/seald/centimaitre.svg?style=flat-square
-[travis-url]: https://travis-ci.org/seald/centimaitre-fetch
+[travis-url]: https://travis-ci.org/seald/centimaitre
 [codecov-image]: https://img.shields.io/codecov/c/github/seald/centimaitre.svg?style=flat-square
 [codecov-url]: https://codecov.io/gh/seald/centimaitre
 [license-image]: https://img.shields.io/github/license/seald/centimaitre.svg?style=flat-square
