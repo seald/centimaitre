@@ -70,7 +70,6 @@ describe('CLI', () => {
     assert.include(parsedResult[i], 'test4')
     assert.include(parsedResult[i], 'Finished after')
     i++
-    assert.include(parsedResult[i], 'test4')
     assert.include(parsedResult[i], 'All tasks finished after')
     i++
     assert.equal(parsedResult[i], '')
@@ -128,7 +127,9 @@ describe('CLI', () => {
 
   it('Non exisisting task', () => expect(CLI(['--cmfile=test/cmFiles/cm1.js', 'test5'])).to.be.rejectedWith(Error).and.eventually.satisfy(err => {
     const { stdout, stderr } = err
-    assert.equal(stdout, '')
+    const parsedStdOut = stdout.split('\n')
+    assert.isAtLeast(parsedStdOut.length, 2)
+    assert.include(parsedStdOut[0], 'Tasks failed after')
     const parsedResult = stderr.split('\n')
     assert.isAtLeast(parsedResult.length, 3)
     assert.include(parsedResult[0], 'Task "test5" does not exist')
@@ -203,7 +204,6 @@ describe('CLI', () => {
     assert.include(parsedResult[i], 'test4')
     assert.include(parsedResult[i], 'Finished after')
     i++
-    assert.include(parsedResult[i], 'test4')
     assert.include(parsedResult[i], 'All tasks finished after')
     i++
     assert.equal(parsedResult[i], '')

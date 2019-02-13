@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 const { executeTask, tasks: tasksObject } = require('../centimaitre')
-const { log } = require('../utils')
+const { formatTimeDelta, log } = require('../utils')
 const path = require('path')
 const yargs = require('yargs')
 const chalk = require('chalk')
@@ -46,11 +46,17 @@ for (const option of Object.keys(tasksOptions)) {
   log.debug(`${option}: ${tasksOptions[option]}`)
 }
 
+let mainTaskStartTime
+
+mainTaskStartTime = Date.now()
+
 Promise.all(tasks.map(taskName => executeTask(taskName, tasksOptions)))
   .then(() => {
+    log.info(`All tasks finished after ${chalk.magenta(formatTimeDelta(Date.now() - mainTaskStartTime))}`)
     process.exit(0)
   })
   .catch(err => {
+    log.info(`Tasks failed after ${chalk.magenta(formatTimeDelta(Date.now() - mainTaskStartTime))}`)
     console.error(err)
     process.exit(1)
   })
