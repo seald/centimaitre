@@ -70,7 +70,7 @@ const resolveTaskArguments = args => {
 const task = (...args) => {
   const { taskName, dependencies, callback } = resolveTaskArguments(args)
   log.debug(`Defining task "${taskName}" ${dependencies.length > 0 ? `with dependencies "${dependencies.join('", "')}"` : 'with no dependencies'}`)
-  if (tasks.hasOwnProperty(taskName)) {
+  if (Object.prototype.hasOwnProperty.call(tasks, taskName)) {
     log.error(`"${taskName}" has been defined multiple times`)
     throw new Error(`Multiple tasks defined with same taskName "${taskName}"`)
   }
@@ -91,7 +91,7 @@ const task = (...args) => {
  */
 const executeTask = async (taskName, options, calledTasks = []) => {
   log.debug(`Asked to execute task "${taskName}"`)
-  if (!tasks.hasOwnProperty(taskName)) {
+  if (!Object.prototype.hasOwnProperty.call(tasks, taskName)) {
     log.error(`Task "${taskName}" does not exist`)
     throw new Error(`Called non-existing task ${taskName} from ${calledTasks.pop()}`)
   }
