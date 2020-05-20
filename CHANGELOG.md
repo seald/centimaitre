@@ -1,6 +1,7 @@
-## Unreleased (2020-05-XX)
+## v1.0.4 (2020-05-20)
 * Update dependencies
 * Add Node 12 & Node 14 as targets for testing
+* Remove useless files from package
 
 ## v1.0.3 (2019-02-13)
 * Add a log of total time

@@ -9,6 +9,12 @@
     "coverage": "nyc npm test",
     "report": "npm run coverage && nyc report --reporter=text-lcov > coverage.lcov && codecov"
   },
+  "files": [
+    "/bin/*",
+    "/centimaitre.js",
+    "/index.js",
+    "/utils.js"
+  ],
   "bin": {
     "centimaitre": "./bin/centimaitre-cli.js",
     "cm": "./bin/centimaitre-cli.js"
