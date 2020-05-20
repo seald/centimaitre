@@ -35,7 +35,7 @@ try {
   log.debug(`Using cmfile ${chalk.magenta(cmfilePath)}`)
   require(cmfilePath)
 } catch (err) {
-  if (err.code === 'MODULE_NOT_FOUND' && typeof err.message === 'string' && err.message.includes(cmfilePath)) {
+  if (err.code === 'MODULE_NOT_FOUND' && typeof err.message === 'string' && err.message.includes(`Cannot find module '${cmfilePath}'`)) {
     log.error(`Could not resolve file ${cmfilePath}`)
   } else log.error(`Unknown error ${err.stack}`)
   process.exit(1)
@@ -46,9 +46,7 @@ for (const option of Object.keys(tasksOptions)) {
   log.debug(`${option}: ${tasksOptions[option]}`)
 }
 
-let mainTaskStartTime
-
-mainTaskStartTime = Date.now()
+const mainTaskStartTime = Date.now()
 
 Promise.all(tasks.map(taskName => executeTask(taskName, tasksOptions)))
   .then(() => {

@@ -1,3 +1,7 @@
+## Unreleased (2020-05-XX)
+* Update dependencies
+* Add Node 12 & Node 14 as targets for testing
+
 ## v1.0.3 (2019-02-13)
 * Add a log of total time
 * Update dependencies
